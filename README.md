@@ -27,3 +27,20 @@ npm start
 ## Verificación
 
 npm run lint
+## API REST
+
+Puerto: 3000
+
+### Endpoints
+
+- GET /tasks - Listar tareas
+- GET /tasks/:id - Obtener tarea por ID
+- POST /tasks - Crear tarea
+- PUT /tasks/:id - Editar tarea o cambiar estado
+- DELETE /tasks/:id - Eliminar tarea
+
+### Estados permitidos
+
+- pendiente
+- en_progreso
+- finalizada
