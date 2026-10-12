@@ -1,4 +1,4 @@
-# Guía de virtualización — Entorno de pruebas distribuido (T1.6)
+# Guía de virtualización — Entorno de pruebas distribuido
 
 Guía paso a paso para construir el entorno virtualizado donde se despliegan y prueban los tres prototipos del proyecto (**Cliente-Servidor**, **P2P** y **Microservicios**) sobre una red real entre máquinas.
 
