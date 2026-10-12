@@ -166,3 +166,45 @@ En esta etapa las tareas se almacenan en memoria.
 Por lo tanto, al detener y volver a iniciar la aplicación las tareas creadas desaparecen.
 
 Esta decisión permite mantener el prototipo simple para las pruebas y la comparación entre las tres arquitecturas.
+
+
+
+##Virtualizacion
+ **Guía completa paso a paso:** [docs/VIRTUALIZACION.md](docs/VIRTUALIZACION.md)
+(creación de las VMs en VirtualBox, red Host-Only, IP fija, SSH, instalación de Docker, despliegue y pruebas).
+
+### Topología
+
+| VM | IP | Servicios |
+|---|---|---|
+| VM1 `vm1-cs-p2p` | 192.168.56.11 | **Cliente-Servidor :3000** + P2P nodo-1 :4001 |
+| VM2 `vm2-p2p-micro` | 192.168.56.12 | P2P nodo-2 :4002 + Microservicio de tareas :5001 |
+
+### Desplegar este prototipo en VM1
+
+Dentro de VM1 (por SSH: `ssh grupo10@192.168.56.11`):
+
+```bash
+mkdir -p ~/proyecto && cd ~/proyecto
+git clone https://github.com/FabriCordovaCaceres/servicios-telematicos-cliente-servidor.git
+cd ~/proyecto/servicios-telematicos-cliente-servidor
+docker build -t tele-cliente-servidor .
+docker run -d --name tele-cs --restart unless-stopped -p 3000:3000 tele-cliente-servidor
+```
+
+Comprobar desde VM2 (a través de la red):
+
+```bash
+curl http://192.168.56.11:3000/
+curl http://192.168.56.11:3000/tasks
+```
+
+### Actualizar tras un cambio en GitHub
+
+```bash
+cd ~/proyecto/servicios-telematicos-cliente-servidor
+git pull
+docker build -t tele-cliente-servidor .
+docker rm -f tele-cs
+docker run -d --name tele-cs --restart unless-stopped -p 3000:3000 tele-cliente-servidor
+```
