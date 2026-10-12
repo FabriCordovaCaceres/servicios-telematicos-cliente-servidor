@@ -170,6 +170,7 @@ Esta decisión permite mantener el prototipo simple para las pruebas y la compar
 
 
 ##Virtualizacion
+
  **Guía completa paso a paso:** [docs/VIRTUALIZACION.md](docs/VIRTUALIZACION.md)
 (creación de las VMs en VirtualBox, red Host-Only, IP fija, SSH, instalación de Docker, despliegue y pruebas).
 
