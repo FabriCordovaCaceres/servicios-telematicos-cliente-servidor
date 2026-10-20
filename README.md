@@ -209,3 +209,35 @@ docker build -t tele-cliente-servidor .
 docker rm -f tele-cs
 docker run -d --name tele-cs --restart unless-stopped -p 3000:3000 tele-cliente-servidor
 ```
+
+---
+
+## Sprint 2 — Sincronización en tiempo real (RQ4)
+
+El servidor ahora tiene un canal **WebSocket** en `ws://<servidor>:3000/ws`.
+Cada vez que se crea, modifica o elimina una tarea por la API REST, el
+servidor avisa a **todos** los clientes conectados.
+
+### Mensajes que envía el servidor
+
+| Mensaje (`tipo`) | Cuándo | Contenido |
+|---|---|---|
+| `snapshot` | Al conectarse | `tareas`: lista completa actual |
+| `tarea:creada` | POST `/tasks` | `tarea` |
+| `tarea:actualizada` | PUT `/tasks/:id` | `tarea` (con `version` aumentada) |
+| `tarea:eliminada` | DELETE `/tasks/:id` | `id`, `version`, `updatedAt`, `updatedBy` |
+
+Todos incluyen `origen` y `enviadoEn` (milisegundos, para medir latencia).
+
+### Probarlo
+
+- Navegador: abrir `http://<servidor>:3000/demo/` en dos dispositivos distintos.
+- Consola (por ejemplo desde VM2): `npm run escuchar -- ws://192.168.56.11:3000/ws`
+  o, con Docker, `docker exec -it tele-cs node dist/tools/escuchar.js ws://localhost:3000/ws`.
+- Crear una tarea: `curl -X POST http://192.168.56.11:3000/tasks -H "Content-Type: application/json" -d '{"titulo":"Tarea en vivo","updatedBy":"vm2"}'`
+
+### Nuevos archivos
+
+`src/events/task.events.ts`, `src/realtime/websocket.ts`, `src/tools/escuchar.ts`,
+`public/index.html`. Se modificaron `src/services/task.service.ts`, `src/index.ts`
+y el `Dockerfile` (ahora copia `public/`). Nueva dependencia: `ws`.
