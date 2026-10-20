@@ -1,5 +1,7 @@
+import path from "node:path";
 import express from "express";
 import taskRoutes from "./routes/task.routes";
+import { iniciarWebSocket } from "./realtime/websocket";
 
 const app = express();
 const PORT = 3000;
@@ -13,10 +15,16 @@ app.get("/", (_req, res) => {
   });
 });
 
+// Página de demostración del tiempo real: http://<servidor>:3000/demo/
+app.use("/demo", express.static(path.join(__dirname, "..", "public")));
+
 app.use("/tasks", taskRoutes);
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(
     `Cliente-Servidor iniciado correctamente en http://localhost:${PORT}`,
   );
 });
+
+// Sprint 2: canal WebSocket en ws://localhost:3000/ws
+iniciarWebSocket(server);

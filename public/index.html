@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cliente-Servidor — Tareas en tiempo real</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 760px; margin: 20px auto; padding: 0 12px; }
+    h1 { font-size: 1.3rem; }
+    #estado { padding: 4px 10px; border-radius: 12px; font-size: 0.85rem; color: #fff; background: #c0392b; }
+    #estado.conectado { background: #27ae60; }
+    form { display: flex; gap: 8px; margin: 16px 0; }
+    input { flex: 1; padding: 8px; }
+    button { padding: 8px 12px; cursor: pointer; }
+    ul { list-style: none; padding: 0; }
+    li { display: flex; align-items: center; gap: 8px; padding: 8px; border: 1px solid #ddd; margin-bottom: 6px; border-radius: 6px; }
+    li .titulo { flex: 1; }
+    li .meta { color: #666; font-size: 0.75rem; }
+    #registro { background: #f4f4f4; padding: 8px; font-family: monospace; font-size: 0.75rem; height: 160px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <h1>Prototipo Cliente-Servidor — tareas en tiempo real <span id="estado">desconectado</span></h1>
+
+  <form id="formulario">
+    <input id="titulo" placeholder="Título de la nueva tarea" required />
+    <button type="submit">Crear tarea</button>
+  </form>
+
+  <ul id="lista"></ul>
+
+  <h2 style="font-size:1rem">Registro de eventos</h2>
+  <div id="registro"></div>
+
+  <script>
+    const ESTADOS = ["pendiente", "en_progreso", "finalizada"];
+    const tareas = new Map();
+    const lista = document.getElementById("lista");
+    const registro = document.getElementById("registro");
+    const indicador = document.getElementById("estado");
+
+    function anotar(texto) {
+      const linea = document.createElement("div");
+      linea.textContent = new Date().toLocaleTimeString() + "  " + texto;
+      registro.prepend(linea);
+    }
+
+    function dibujar() {
+      lista.replaceChildren();
+      for (const t of tareas.values()) {
+        const li = document.createElement("li");
+
+        const titulo = document.createElement("span");
+        titulo.className = "titulo";
+        titulo.textContent = t.titulo;
+
+        const meta = document.createElement("span");
+        meta.className = "meta";
+        meta.textContent = "v" + t.version + " · " + t.updatedBy;
+
+        const selector = document.createElement("select");
+        for (const e of ESTADOS) {
+          const opcion = document.createElement("option");
+          opcion.value = e;
+          opcion.textContent = e;
+          opcion.selected = e === t.estado;
+          selector.append(opcion);
+        }
+        selector.addEventListener("change", () => {
+          fetch("/tasks/" + t.id, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ estado: selector.value, updatedBy: "navegador" }),
+          });
+        });
+
+        const borrar = document.createElement("button");
+        borrar.textContent = "Eliminar";
+        borrar.addEventListener("click", () => {
+          fetch("/tasks/" + t.id, { method: "DELETE" });
+        });
+
+        li.append(titulo, meta, selector, borrar);
+        lista.append(li);
+      }
+    }
+
+    function conectar() {
+      const protocolo = location.protocol === "https:" ? "wss" : "ws";
+      const socket = new WebSocket(protocolo + "://" + location.host + "/ws");
+
+      socket.addEventListener("open", () => {
+        indicador.textContent = "conectado";
+        indicador.classList.add("conectado");
+        anotar("Conectado al servidor");
+      });
+
+      socket.addEventListener("message", (evento) => {
+        const m = JSON.parse(evento.data);
+        if (m.tipo === "snapshot") {
+          tareas.clear();
+          for (const t of m.tareas) tareas.set(t.id, t);
+          anotar("Estado inicial recibido (" + m.tareas.length + " tareas)");
+        } else if (m.tipo === "tarea:creada" || m.tipo === "tarea:actualizada") {
+          tareas.set(m.tarea.id, m.tarea);
+          anotar(m.tipo + ": " + m.tarea.titulo);
+        } else if (m.tipo === "tarea:eliminada") {
+          tareas.delete(m.id);
+          anotar(m.tipo + ": " + m.id);
+        }
+        dibujar();
+      });
+
+      // Si se cae la conexión, reintenta cada 2 segundos
+      socket.addEventListener("close", () => {
+        indicador.textContent = "desconectado";
+        indicador.classList.remove("conectado");
+        anotar("Conexión perdida. Reintentando...");
+        setTimeout(conectar, 2000);
+      });
+    }
+
+    document.getElementById("formulario").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const campo = document.getElementById("titulo");
+      fetch("/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ titulo: campo.value, updatedBy: "navegador" }),
+      });
+      campo.value = "";
+    });
+
+    conectar();
+  </script>
+</body>
+</html>
