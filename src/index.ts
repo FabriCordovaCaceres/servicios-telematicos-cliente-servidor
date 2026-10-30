@@ -2,10 +2,12 @@ import path from "node:path";
 import express from "express";
 import taskRoutes from "./routes/task.routes";
 import { iniciarWebSocket } from "./realtime/websocket";
+import { cors } from "./http/cors";
 
 const app = express();
 const PORT = 3000;
 
+app.use(cors);
 app.use(express.json());
 
 app.get("/", (_req, res) => {
