@@ -50,7 +50,8 @@ router.post("/", (req: Request, res: Response) => {
     updatedBy = "cliente-servidor",
   } = req.body;
 
-  if (!titulo || typeof titulo !== "string") {
+  // Sprint 4 (T4.6): un título hecho solo de espacios también se rechaza
+  if (typeof titulo !== "string" || titulo.trim() === "") {
     return res.status(400).json({
       mensaje: "El título es obligatorio",
     });
@@ -81,6 +82,16 @@ router.put("/:id", (req: Request, res: Response) => {
     estado,
     updatedBy = "cliente-servidor",
   } = req.body;
+
+  // Sprint 4 (T4.6): si se envía un título, no puede quedar vacío
+  if (
+    titulo !== undefined &&
+    (typeof titulo !== "string" || titulo.trim() === "")
+  ) {
+    return res.status(400).json({
+      mensaje: "El título no puede estar vacío",
+    });
+  }
 
   if (
     estado !== undefined &&

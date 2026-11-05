@@ -5,7 +5,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-const BASE = "http://localhost:3000/tasks";
+// Sprint 4: CS_URL permite apuntar a la VM (por defecto, localhost)
+const BASE = `${(process.env.CS_URL ?? "http://localhost:3000").replace(/\/+$/, "")}/tasks`;
 const ID_INEXISTENTE = "00000000-0000-0000-0000-000000000000";
 
 async function solicitar(ruta, metodo = "GET", datos) {

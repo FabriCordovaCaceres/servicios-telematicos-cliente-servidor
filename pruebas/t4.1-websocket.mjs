@@ -3,8 +3,10 @@
 import WebSocket from "ws";
 import assert from "node:assert/strict";
 
-const HTTP = "http://localhost:3000/tasks";
-const WS = "ws://localhost:3000/ws";
+// Sprint 4: CS_URL permite apuntar a la VM (por defecto, localhost)
+const SERVIDOR = (process.env.CS_URL ?? "http://localhost:3000").replace(/\/+$/, "");
+const HTTP = `${SERVIDOR}/tasks`;
+const WS = `${SERVIDOR.replace(/^http/, "ws")}/ws`;
 
 const clientes = [];
 let idTarea = null;

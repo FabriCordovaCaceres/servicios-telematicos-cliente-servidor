@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --test pruebas/t4.1-rest.test.mjs && node pruebas/t4.1-websocket.mjs",
     "dev": "tsx src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",

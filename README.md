@@ -260,3 +260,32 @@ Remove-Item Env:SERVIDORES
 ```
 
 Para medir también CPU, RAM, red y latencia en las VMs, usar `metricas/medir-vm.ps1` del repositorio de microservicios.
+
+## Sprint 4 — Pruebas funcionales y no funcionales (RQ13, RQ14)
+
+| Tarea | Archivo | Qué prueba |
+|---|---|---|
+| T4.1 | `pruebas/t4.1-rest.test.mjs`, `pruebas/t4.1-websocket.mjs` | CRUD REST, validaciones y eventos WebSocket con dos clientes |
+| T4.4 | `simulacion/rendimiento-t4.4.mjs` | Rendimiento con 2, 5, 10 y 20 usuarios virtuales |
+| T4.5 | `pruebas/T4.5/comunicacion-t4.5.mjs` | Interrupción, reconexión y solicitudes duplicadas |
+| T4.6 | `pruebas/T4.6/seguridad-t4.6.mjs`, `pruebas/T4.6/fallos-t4.6.mjs` | Validación de entradas, puertos, TLS y tolerancia a fallos |
+
+Documentación de T4.1: `docs/T4.1-pruebas-funcionales.md`.
+
+```powershell
+npm test                                   # local (http://localhost:3000)
+$env:CS_URL="http://192.168.56.11:3000"     # entorno virtualizado (VM1)
+npm test
+node pruebas/T4.5/comunicacion-t4.5.mjs
+node pruebas/T4.6/seguridad-t4.6.mjs
+node pruebas/T4.6/fallos-t4.6.mjs           # pide detener/reiniciar el servidor (docker stop/start tele-cs)
+```
+
+Con `CS_URL` definido, las evidencias se guardan con el prefijo `vm-` y el informe de T4.6 en `RESULTADOS-VM.md`,
+sin reemplazar los resultados locales.
+
+Cambios del Sprint 4 en el servidor:
+- **CORS** (`src/http/cors.ts`): permite que la interfaz gráfica, servida desde otro puerto, consuma la API.
+  El origen permitido se configura con `CORS_ORIGIN` (por defecto `*`).
+- **Validación:** `POST /tasks` y `PUT /tasks/:id` rechazan con HTTP 400 un título compuesto solo de espacios
+  (hallazgo detectado en T4.6).

@@ -60,8 +60,10 @@ async function cerrar(conexion) {
 function guardar() {
   const carpeta = path.join(path.dirname(fileURLToPath(import.meta.url)), 'resultados');
   fs.mkdirSync(carpeta, { recursive: true });
-  const archivo = path.join(carpeta, `cs-${ID}.json`);
-  fs.writeFileSync(archivo, JSON.stringify({ requisito: 'RQ14', tarea: 'T4.5', arquitectura: 'cs', fecha: new Date().toISOString(), ejecucion: ID, resultados }, null, 2));
+  // Sprint 4: las ejecuciones en las VMs se guardan con prefijo vm-
+  const esVM = ['CS_URL'].some((v) => process.env[v]);
+  const archivo = path.join(carpeta, `${esVM ? 'vm-' : ''}cs-${ID}.json`);
+  fs.writeFileSync(archivo, JSON.stringify({ requisito: 'RQ14', tarea: 'T4.5', arquitectura: 'cs', entorno: esVM ? 'virtualizado' : 'local', fecha: new Date().toISOString(), ejecucion: ID, resultados }, null, 2));
   console.log(`\nEvidencia: ${archivo}`);
 }
 async function main() {
