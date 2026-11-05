@@ -77,17 +77,21 @@ export function updateTask(
   return task;
 }
 
-export function deleteTask(id: string): boolean {
-  const index = tasks.findIndex((task) => task.id === id);
-  const task = tasks[index];
 
+export function deleteTask(id: string): boolean {
+  // Buscar la tarea por su identificador
+  const task = tasks.find((t) => t.id === id);
+
+  // Si la tarea no existe, devolver false
   if (!task) {
     return false;
   }
 
+  // Obtener su posición y eliminarla del arreglo
+  const index = tasks.indexOf(task);
   tasks.splice(index, 1);
 
-  // Sprint 2: avisa a los clientes conectados por WebSocket
+  // Notificar la eliminación a los clientes WebSocket
   emitTaskEvent({
     tipo: "tarea:eliminada",
     id,

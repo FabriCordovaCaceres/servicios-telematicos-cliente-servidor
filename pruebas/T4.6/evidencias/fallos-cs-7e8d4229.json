@@ -1,0 +1,43 @@
+{
+  "tarea": "T4.6",
+  "requisito": "RQ14",
+  "arquitectura": "cs",
+  "fecha": "2026-11-05T01:24:31.678Z",
+  "ejecucion": "7e8d4229",
+  "resumen": {
+    "OK": 3,
+    "HALLAZGO": 0,
+    "ERROR": 0,
+    "OBSERVADO": 1
+  },
+  "pruebas": [
+    {
+      "prueba": "Cliente-Servidor 3000 antes del fallo",
+      "estado": "OK",
+      "esperado": "200",
+      "observado": 200,
+      "detalle": ""
+    },
+    {
+      "prueba": "Cliente-Servidor 3000 detenido",
+      "estado": "OK",
+      "esperado": "sin conexion",
+      "observado": "sin conexion",
+      "detalle": ""
+    },
+    {
+      "prueba": "Cliente-Servidor 3000 reiniciado",
+      "estado": "OK",
+      "esperado": "200",
+      "observado": "200",
+      "detalle": ""
+    },
+    {
+      "prueba": "Disponibilidad durante el fallo",
+      "estado": "OBSERVADO",
+      "esperado": "evaluacion",
+      "observado": "servicio no disponible",
+      "detalle": "No hay alta disponibilidad automatica demostrada; recuperacion manual comprobada"
+    }
+  ]
+}
