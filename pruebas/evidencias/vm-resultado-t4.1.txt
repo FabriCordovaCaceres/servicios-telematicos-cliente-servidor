@@ -1,0 +1,39 @@
+﻿
+> cliente-servidor@1.0.0 test
+> node --test pruebas/t4.1-rest.test.mjs && node pruebas/t4.1-websocket.mjs
+
+TAP version 13
+# OK PF-CS-01: Listar tareas
+# OK PF-CS-02: Titulo vacio rechazado
+# OK PF-CS-03: Titulo numerico rechazado
+# OK PF-CS-04: Crear tarea
+# OK PF-CS-05: Consultar tarea
+# OK PF-CS-06: Estado invalido rechazado
+# OK PF-CS-07: Actualizar tarea
+# OK PF-CS-08: Consulta inexistente
+# OK PF-CS-09: Eliminacion inexistente
+# OK PF-CS-10: Eliminar tarea
+# OK PF-CS-11: Eliminacion confirmada
+# RESULTADO: 11 COMPROBACIONES REST APROBADAS
+# Subtest: T4.1 - Pruebas funcionales REST Cliente-Servidor
+ok 1 - T4.1 - Pruebas funcionales REST Cliente-Servidor
+  ---
+  duration_ms: 200.3596
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 333.046
+OK: Cliente 1 conectado y snapshot recibido
+OK: Cliente 2 conectado y snapshot recibido
+OK: Ambos clientes recibieron tarea:creada
+OK: Ambos clientes recibieron tarea:actualizada
+OK: Ambos clientes recibieron tarea:eliminada
+OK: La tarea ya no existe (HTTP 404)
+
+RESULTADO: PRUEBAS WEBSOCKET APROBADAS

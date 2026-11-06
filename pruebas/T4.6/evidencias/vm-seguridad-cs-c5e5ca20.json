@@ -1,0 +1,121 @@
+{
+  "tarea": "T4.6",
+  "requisito": "RQ14",
+  "arquitectura": "cs",
+  "fecha": "2026-11-06T19:17:41.399Z",
+  "ejecucion": "c5e5ca20",
+  "entorno": "virtualizado (direcciones por variables de entorno)",
+  "endpoints": [
+    {
+      "nombre": "Cliente-Servidor",
+      "base": "http://192.168.56.11:3000",
+      "ruta": "/tasks"
+    }
+  ],
+  "resumen": {
+    "OK": 12,
+    "HALLAZGO": 0,
+    "ERROR": 0,
+    "OBSERVADO": 2
+  },
+  "pruebas": [
+    {
+      "prueba": "Cliente-Servidor: servicio disponible",
+      "estado": "OK",
+      "esperado": "200",
+      "observado": 200,
+      "detalle": ""
+    },
+    {
+      "prueba": "Cliente-Servidor: cabeceras HTTP",
+      "estado": "OBSERVADO",
+      "esperado": "revision",
+      "observado": "{\"x-powered-by\":\"Express\",\"x-content-type-options\":null,\"strict-transport-security\":null}",
+      "detalle": "Ausencia de cabecera no prueba por si sola una vulnerabilidad"
+    },
+    {
+      "prueba": "Cliente-Servidor: ID inexistente",
+      "estado": "OK",
+      "esperado": "404",
+      "observado": 404,
+      "detalle": ""
+    },
+    {
+      "prueba": "Cliente-Servidor: POST sin titulo",
+      "estado": "OK",
+      "esperado": "400",
+      "observado": 400,
+      "detalle": ""
+    },
+    {
+      "prueba": "Cliente-Servidor: POST titulo numerico",
+      "estado": "OK",
+      "esperado": "400",
+      "observado": 400,
+      "detalle": ""
+    },
+    {
+      "prueba": "Cliente-Servidor: POST titulo vacio",
+      "estado": "OK",
+      "esperado": "400",
+      "observado": 400,
+      "detalle": ""
+    },
+    {
+      "prueba": "Cliente-Servidor: JSON malformado",
+      "estado": "OK",
+      "esperado": "400",
+      "observado": 400,
+      "detalle": ""
+    },
+    {
+      "prueba": "Cliente-Servidor: crear tarea temporal",
+      "estado": "OK",
+      "esperado": "201",
+      "observado": 201,
+      "detalle": ""
+    },
+    {
+      "prueba": "Cliente-Servidor: PUT titulo solo espacios",
+      "estado": "OK",
+      "esperado": "400",
+      "observado": 400,
+      "detalle": ""
+    },
+    {
+      "prueba": "Cliente-Servidor: PUT estado invalido",
+      "estado": "OK",
+      "esperado": "400",
+      "observado": 400,
+      "detalle": ""
+    },
+    {
+      "prueba": "Cliente-Servidor: eliminar tarea temporal",
+      "estado": "OK",
+      "esperado": "204",
+      "observado": 204,
+      "detalle": ""
+    },
+    {
+      "prueba": "Cliente-Servidor: titulo solo espacios",
+      "estado": "OK",
+      "esperado": "rechazo",
+      "observado": 400,
+      "detalle": ""
+    },
+    {
+      "prueba": "Puerto 3000 en 192.168.56.11",
+      "estado": "OK",
+      "esperado": "ABIERTO",
+      "observado": "ABIERTO",
+      "detalle": "Alcance: accesible desde el equipo de pruebas hacia 192.168.56.11"
+    },
+    {
+      "prueba": "TLS verificado 3000",
+      "estado": "OBSERVADO",
+      "esperado": "TLS_VERIFICADO",
+      "observado": "ERR_SSL_WRONG_VERSION_NUMBER",
+      "detalle": "Una prueba local negativa no descarta TLS en un proxy inverso externo"
+    }
+  ]
+}

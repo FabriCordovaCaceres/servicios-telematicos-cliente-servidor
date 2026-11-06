@@ -1,0 +1,30 @@
+{
+  "requisito": "RQ14",
+  "tarea": "T4.5",
+  "arquitectura": "cs",
+  "entorno": "virtualizado",
+  "fecha": "2026-11-06T19:01:19.171Z",
+  "ejecucion": "7cbcdba1",
+  "resultados": [
+    {
+      "prueba": "Conexion inicial",
+      "resultado": "OK",
+      "detalle": "WebSocket conectado y snapshot recibido."
+    },
+    {
+      "prueba": "Interrupcion de notificaciones",
+      "resultado": "OBSERVADO",
+      "detalle": "Se creo una tarea sin ningun cliente de prueba WebSocket conectado; no es perdida fisica de paquetes."
+    },
+    {
+      "prueba": "Reconexion",
+      "resultado": "RECUPERADO",
+      "detalle": "Al reconectar manualmente se recibe snapshot con la tarea creada durante la desconexion."
+    },
+    {
+      "prueba": "Solicitudes duplicadas",
+      "resultado": "NO_MITIGADO",
+      "detalle": "Dos POST con igual contenido crean dos ID distintos y generan dos eventos; no existe clave de idempotencia."
+    }
+  ]
+}

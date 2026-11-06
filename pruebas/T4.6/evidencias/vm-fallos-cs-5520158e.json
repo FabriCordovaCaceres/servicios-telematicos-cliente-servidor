@@ -1,0 +1,51 @@
+{
+  "tarea": "T4.6",
+  "requisito": "RQ14",
+  "arquitectura": "cs",
+  "fecha": "2026-11-06T19:19:29.134Z",
+  "ejecucion": "5520158e",
+  "entorno": "virtualizado (direcciones por variables de entorno)",
+  "endpoints": [
+    {
+      "nombre": "Cliente-Servidor",
+      "base": "http://192.168.56.11:3000",
+      "ruta": "/tasks"
+    }
+  ],
+  "resumen": {
+    "OK": 3,
+    "HALLAZGO": 0,
+    "ERROR": 0,
+    "OBSERVADO": 1
+  },
+  "pruebas": [
+    {
+      "prueba": "Cliente-Servidor 3000 antes del fallo",
+      "estado": "OK",
+      "esperado": "200",
+      "observado": 200,
+      "detalle": ""
+    },
+    {
+      "prueba": "Cliente-Servidor 3000 detenido",
+      "estado": "OK",
+      "esperado": "sin conexion",
+      "observado": "sin conexion",
+      "detalle": ""
+    },
+    {
+      "prueba": "Cliente-Servidor 3000 reiniciado",
+      "estado": "OK",
+      "esperado": "200",
+      "observado": "200",
+      "detalle": ""
+    },
+    {
+      "prueba": "Disponibilidad durante el fallo",
+      "estado": "OBSERVADO",
+      "esperado": "evaluacion",
+      "observado": "servicio no disponible",
+      "detalle": "No hay alta disponibilidad automatica demostrada; recuperacion manual comprobada"
+    }
+  ]
+}
